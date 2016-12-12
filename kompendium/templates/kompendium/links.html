@@ -1,0 +1,20 @@
+{% extends 'kompendium/base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<div id="inhalt">
+  <div class="container">
+    <div class="row center-block col-sm-6">
+      
+      {% for kategorie in kategorien %}
+        <h2> {{ kategorie }} </h2>
+          {% for link in kategorie.links.all %}
+              
+                <a class="btn btn-default" href="{{ link }}" target="_blank" role="button">{{ link }}</a>
+              
+            {% endfor %}
+        {% endfor %}
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

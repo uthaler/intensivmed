@@ -1,0 +1,20 @@
+{% extends "kompendium/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <form action="{% url 'kompendium:rechner' %}" method='post'>
+    {% csrf_token %}
+    <div class="container">
+      <div class="row center-block clo-sm-6">
+        <div class="form-group">
+          <div class="center-block col-sm-6">
+            {% crispy form %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--- <button name="submit">schick los</button> ---!>
+  </form>
+
+{% endblock content %}

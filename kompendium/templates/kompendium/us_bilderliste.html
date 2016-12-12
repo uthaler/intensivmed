@@ -1,0 +1,15 @@
+{% extends 'kompendium/base.html' %}
+
+{% block content %}
+
+<p>Bilderliste:</p>
+<ul>
+  {% for bild in bilder_liste %}
+    <li>
+       {{ bild }}
+    </li>
+  {% empty %}
+    <li>Es gibt noch keinen Eintrag.</li>
+  {% endfor %}
+</ul>
+{% endblock content %}

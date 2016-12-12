@@ -1,0 +1,12 @@
+{% extends 'kompendium/base.html' %}
+
+{% block content %}
+
+<ul>
+{% for entry in entry %}
+  <li>  
+    <p>{{ entry.text|linebreaks }}</p>
+  </li>
+{% endfor %}
+</ul>
+{% endblock content %}

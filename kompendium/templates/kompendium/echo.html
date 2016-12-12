@@ -1,0 +1,16 @@
+{% extends 'kompendium/base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+
+<div id="inhalt">
+  <div class="container">
+    <div class="row center-block col-sm-6">
+      <ul>
+        {% for auswahl in auswahl %}
+        <li><a href="{% url 'kompendium:us_bilderliste' auswahl.id %}"> {{ auswahl }} </a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock content %}

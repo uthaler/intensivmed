@@ -1,0 +1,8 @@
+{% extends 'kompendium/base.html' %}
+
+{% block content %}
+<a href="{% url 'kompendium:rechner' %}">Zurück zum Rechner</a>
+<p>
+  {{resultat}}
+</p>
+{% endblock content %}

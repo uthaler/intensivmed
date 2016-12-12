@@ -1,0 +1,16 @@
+{% extends 'kompendium/base.html' %}
+
+{% block content %}
+<p>Topic: {{ topics }}</p>
+
+<p>Subtopics:</p>
+<ul>
+  {% for subtopic in subtopics %}
+    <li>
+            <a href="{% url 'kompendium:entry' topics.id subtopic.id  %}"> {{ subtopic }} </a>
+    </li>
+  {% empty %}
+    <li>Es gibt noch keinen Eintrag.</li>
+  {% endfor %}
+</ul>
+{% endblock content %}
