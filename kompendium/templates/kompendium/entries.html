@@ -7,7 +7,7 @@
   <h1>{{ entry.heading_1 }}</h1>  
   <p>{{ entry.text1|linebreaks }}</p>
   <h2>{{ entry.heading_2 }}</h2>  
-  <p>{{ entry.text2|linebreaks }}</p>
+  <p>{{ entry.text2|safe|linebreaks }}</p>
   <h2>{{ entry.heading_3 }}</h2>  
   <p>{{ entry.text3|linebreaks }}</p>
   <h2>{{ entry.heading_4 }}</h2>  
