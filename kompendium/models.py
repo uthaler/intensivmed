@@ -40,7 +40,7 @@ class Entry(models.Model):
     text6 = models.TextField(null=True, blank=True)
     text7 = models.TextField(null=True, blank=True)
     text8 = models.TextField(null=True, blank=True)
-    image1 = models.FileField(upload_to='documents/', null=True, blank=True)
+    image1 = models.ImageField(upload_to='documents/', null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add = True)
     
     class Meta:
