@@ -8,7 +8,7 @@ from .forms import RechnerForm
 
 def index(request):
     """ the home page for intensivmed """
-    news = News.objects.order_by('news_date_added')
+    news = News.objects.order_by('-news_date_added')
     context = {'news' : news}
     return render(request, 'kompendium/index.html', context)
 
