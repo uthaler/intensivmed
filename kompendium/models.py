@@ -4,6 +4,18 @@ from django.db import models
 
 # Create your models here.
 
+
+##################
+# NEWS auf Index #
+##################
+
+class News(models.Model):
+    news_date_added = models.DateTimeField(auto_now_add = True, null=True, blank=True)
+    news_text = models.TextField(null=True, blank=True)
+    news_image = models.ImageField(upload_to='documents/', null=True, blank=True)
+    def __unicode__(self):
+        return self.news_text[:20]
+
 ###############
 # KOMPENDIUM  #
 ###############

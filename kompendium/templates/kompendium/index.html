@@ -2,6 +2,11 @@
 {% block content %}
 {% load static %}
   <div class="col-sm-8">
+    {% for new in news %}
+      <h3>{{ news.news_date_added }}</h3>
+      <p>{{ news.news_text }}</p>
+      <p>{{ news.news_image }}</p>
+    {% endfor %}
   </div>
   <div class="col-sm-4">
     <a class="twitter-timeline" href="https://twitter.com/hashtag/FOAMcc" data-widget-id="788103316454735872">#FOAMcc-Tweets</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
