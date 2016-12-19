@@ -11,15 +11,10 @@
 
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-
   </head>
-
   <body>
-
-    <!-- Static navbar -->
-    <nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
-
+     <div class="container">
+      <nav class="navbar navbar-inverse navbar-static-top">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"></button>
           <a class ="navbar-brand" href="{% url 'kompendium:index' %}">Home</a>
@@ -33,16 +28,12 @@
             <li><a href="{% url 'kompendium:rechner' %}">Natriumrechner</a></li>
           </ul>
         </div><!--/.nav-collapse -->
+      </nav>
 
-      </div><!-- container -->
-    </nav>
-
-
-    <div class="container">
       <div class="page-header">
         {% block header %}{% endblock header %}
       </div>
-      <div>
+      <div class="row center-block">
         {% block content %}{% endblock content %}
       </div>
     </div><!-- /container -->
