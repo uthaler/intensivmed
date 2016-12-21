@@ -2,3 +2,4 @@ intmed_env/
 *.pyc
 *.sqlite3
 *.swp
+settings.py
