@@ -25,7 +25,7 @@ SECRET_KEY = '9f4fl*ej$g%j6-g%i4=sxn6lrb!46uwndto2fdd6(10r(c)^pj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['82.165.78.186', 'intensivmed.at']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
@@ -83,11 +83,17 @@ WSGI_APPLICATION = 'intensivmed.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
+	#postgresql
+	'ENGINE': 'django.db.backends.postgresql_psycopg2',
+	'NAME': 'intensivmed',
+	'USER': 'intensivmed',
+	'PASSWORD': 'submarine96',
+	'HOST': 'localhost',
+	'PORT': '',
+	}
+} 
+	#'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -127,7 +133,13 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/home/intmed_admin/intensivmed/static'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, "static"),
+#]
 
 # Settings for django-bootstrap3
 BOOTSTRAP3 = {
