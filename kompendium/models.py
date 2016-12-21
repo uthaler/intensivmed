@@ -4,6 +4,18 @@ from django.db import models
 
 # Create your models here.
 
+
+##################
+# NEWS auf Index #
+##################
+
+class News(models.Model):
+    news_date_added = models.DateTimeField(auto_now_add = True, null=True, blank=True)
+    news_text = models.TextField(null=True, blank=True)
+    news_image = models.ImageField(upload_to='documents/', null=True, blank=True)
+    def __unicode__(self):
+        return self.news_text[:20]
+
 ###############
 # KOMPENDIUM  #
 ###############
@@ -25,14 +37,32 @@ class Subtopic(models.Model):
 
 class Entry(models.Model):
     subtopic = models.ForeignKey(Subtopic)
-    text = models.TextField()
+    heading_1 = models.CharField(max_length=200, null=True, blank=True)
+    heading_2 = models.CharField(max_length=200, null=True, blank=True, default='Epidemiologie')
+    heading_3 = models.CharField(max_length=200, null=True, blank=True)
+    heading_4 = models.CharField(max_length=200, null=True, blank=True)
+    heading_5 = models.CharField(max_length=200, null=True, blank=True)
+    heading_6 = models.CharField(max_length=200, null=True, blank=True)
+    heading_7 = models.CharField(max_length=200, null=True, blank=True)
+    text1 = models.TextField(null=True, blank=True)
+    text2 = models.TextField(null=True, blank=True)
+    text3 = models.TextField(null=True, blank=True)
+    text4 = models.TextField(null=True, blank=True)
+    text5 = models.TextField(null=True, blank=True)
+    text6 = models.TextField(null=True, blank=True)
+    text7 = models.TextField(null=True, blank=True)
+    text8 = models.TextField(null=True, blank=True)
+    image1 = models.ImageField(upload_to='documents/', null=True, blank=True)
+    image2 = models.ImageField(upload_to='documents/', null=True, blank=True)
+    image3 = models.ImageField(upload_to='documents/', null=True, blank=True)
+    image4 = models.ImageField(upload_to='documents/', null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add = True)
     
     class Meta:
         verbose_name_plural = 'entries'
 
     def __unicode__(self):
-        return self.text[:50] + "..."
+        return self.heading_1[:50]
 
 #########
 # LINKS #
@@ -77,4 +107,4 @@ class Rechner(models.Model):
     kalium = models.IntegerField()
 
     def __unicode__(self):
-        return (self.natrium, self.kalium)
+        return (self.natrium, self.kalium) 

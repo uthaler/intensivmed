@@ -1,14 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from .models import Topic, Subtopic, Entry, Kategorie, Link, US_Selektion, US_Bilderliste
+from .models import Topic, Subtopic, Entry, Kategorie, Link, US_Selektion, US_Bilderliste, News
 from .forms import RechnerForm
 
 # Create your views here.
 
 def index(request):
     """ the home page for intensivmed """
-    return render(request, 'kompendium/index.html')
+    news = News.objects.order_by('-news_date_added')
+    context = {'news' : news}
+    return render(request, 'kompendium/index.html', context)
 
 def topics(request):
     """ Show all topics """

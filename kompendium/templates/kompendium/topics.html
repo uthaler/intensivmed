@@ -1,13 +1,13 @@
 {% extends "kompendium/base.html" %}
 {% block content  %}
-<p>Topics</p>
-<ul>
-  {% for topic in topics %}
-    <li>
-      <a href="{% url 'kompendium:topic' topic.id %}"> {{ topic }} </a>
-    </li>
-  {% empty %}
-    <li>No topics have been added yet.</li>
-  {% endfor %}
-</ul>
+<div class="topic">
+  <h1>Topics</h1>
+      {% for topic in topics %}
+        <p>
+          <a class="btn btn-default" href="{% url 'kompendium:topic' topic.id %}"  role="button">{{ topic }}</a>
+        </p>
+      {% empty %}
+      <p>No topics have been added yet.</p>
+      {% endfor %}
+</div>
 {% endblock content %}
