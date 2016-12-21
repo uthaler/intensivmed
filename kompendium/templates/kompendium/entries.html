@@ -3,29 +3,36 @@
 {% block content %}
   {% for entry in entry %}
   <div class="row center-block">
-      <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-              <h1>{{ entry.heading_1 }}</h1>  
-            </div>
-            <div class="panel-body">
-                <p>{{ entry.text1|safe }}</p>
-              <h2>{{ entry.heading_2 }}</h2>  
-                <p>{{ entry.text2|safe }}</p>
-              <h2>{{ entry.heading_3 }}</h2>  
-                <p>{{ entry.text3|safe }}</p>
-              <h2>{{ entry.heading_4 }}</h2>  
-                <p>{{ entry.text4|safe }}</p>
-              <h2>{{ entry.heading_5 }}</h2>  
-                <p>{{ entry.text5|safe }}</p>
-              <h2>{{ entry.heading_6 }}</h2>  
-                <p>{{ entry.text6|safe }}</p>
-              <h2>{{ entry.heading_7 }}</h2>  
-                <p>{{ entry.text7|safe }}</p>
-                <p><img src="{{ entry.image1.url }}" class="img-responsive center-block" alt="Responsive image" /></p>
-            </div>
-        </div>
-      </div><!-- panel-group  -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1>{{ entry.heading_1 }}</h1>  
+      </div>
+    </div>    
+    <p>{{ entry.text1|safe }}</p>
+    <h2>{{ entry.heading_2 }}</h2>  
+    <p>{{ entry.text2|safe }}</p>
+    <h2>{{ entry.heading_3 }}</h2>  
+    <p>{{ entry.text3|safe }}</p>
+    <h2>{{ entry.heading_4 }}</h2>  
+    <p>{{ entry.text4|safe }}</p>
+    <h2>{{ entry.heading_5 }}</h2>  
+    <p>{{ entry.text5|safe }}</p>
+    <h2>{{ entry.heading_6 }}</h2>  
+    <p>{{ entry.text6|safe }}</p>
+    <h2>{{ entry.heading_7 }}</h2>  
+    <p>{{ entry.text7|safe }}</p>
+    {% if entry.image1 %}
+      <p><img src="{{ entry.image1.url }}" class="img-responsive center-block" alt="Responsive image" /></p>
+    {% endif %}
+    {% if entry.image2 %}
+      <p><img src="{{ entry.image2.url }}" class="img-responsive center-block" alt="Responsive image" /></p>
+    {% endif %}
+    {% if entry.image3 %}
+      <p><img src="{{ entry.image3.url }}" class="img-responsive center-block" alt="Responsive image" /></p>
+    {% endif %}
+    {% if entry.image4 %}
+      <p><img src="{{ entry.image4.url }}" class="img-responsive center-block" alt="Responsive image" /></p>
+    {% endif %}
   </div>
   {% endfor %}      
 {% endblock content %}

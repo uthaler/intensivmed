@@ -53,6 +53,9 @@ class Entry(models.Model):
     text7 = models.TextField(null=True, blank=True)
     text8 = models.TextField(null=True, blank=True)
     image1 = models.ImageField(upload_to='documents/', null=True, blank=True)
+    image2 = models.ImageField(upload_to='documents/', null=True, blank=True)
+    image3 = models.ImageField(upload_to='documents/', null=True, blank=True)
+    image4 = models.ImageField(upload_to='documents/', null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add = True)
     
     class Meta:

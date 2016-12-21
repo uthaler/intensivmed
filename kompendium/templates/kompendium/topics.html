@@ -4,7 +4,7 @@
   <h1>Topics</h1>
       {% for topic in topics %}
         <p>
-          <a class="btn btn-default" href="{% url 'kompendium:topic' topic.id %}" target="_blank" role="button">{{ topic }}</a>
+          <a class="btn btn-default" href="{% url 'kompendium:topic' topic.id %}"  role="button">{{ topic }}</a>
         </p>
       {% empty %}
       <p>No topics have been added yet.</p>
