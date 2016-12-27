@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Topic, Subtopic, Entry, Kategorie, Link, US_Selektion, US_Bilderliste, News
 from .forms import RechnerForm
 
@@ -8,7 +9,18 @@ from .forms import RechnerForm
 
 def index(request):
     """ the home page for intensivmed """
-    news = News.objects.order_by('-news_date_added')
+    #news = News.objects.order_by('-news_date_added')
+    news_list = News.objects.all()
+    page = request.GET.get('page')
+    paginator = Paginator(news_list, 3)
+
+    try:
+        news = paginator.page(page)
+    except PageNotAnInteger:
+        news = paginator.page(1)
+    except EmptyPage:
+        news = paginator.page(paginator.num_pages)
+
     context = {'news' : news}
     return render(request, 'kompendium/index.html', context)
 
