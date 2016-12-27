@@ -9,8 +9,8 @@ from .forms import RechnerForm
 
 def index(request):
     """ the home page for intensivmed """
-    #news = News.objects.order_by('-news_date_added')
-    news_list = News.objects.all()
+    news_list = News.objects.order_by('-news_date_added')
+    #news_list = News.objects.all()
     page = request.GET.get('page')
     paginator = Paginator(news_list, 3)
 
