@@ -11,7 +11,7 @@ def index(request):
     """ the home page for intensivmed """
     news_list = News.objects.order_by('-news_date_added')
     #news_list = News.objects.all()
-    page = request.GET.get('page')
+    page = request.GET.get('page', 1)
     paginator = Paginator(news_list, 3)
 
     try:
