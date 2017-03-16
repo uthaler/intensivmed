@@ -3,3 +3,4 @@ intmed_env/
 *.sqlite3
 *.swp
 intensivmed/settings.py
+settings.py
