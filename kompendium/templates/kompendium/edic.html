@@ -1,0 +1,14 @@
+{% extends 'kompendium/base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<div id="inhalt">
+  <div class="container">
+    <div class="row center-block col-sm-6">
+      <a class="btn btn-default" href="{% url 'kompendium:index' %}"  role="button">zurück zu index</a> 
+      {% for text in text %}
+        <p> {{ text }} </p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

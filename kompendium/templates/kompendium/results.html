@@ -3,6 +3,21 @@
 {% block content %}
 <a href="{% url 'kompendium:rechner' %}">Zurück zum Rechner</a>
 <p>
-  {{resultat}}
+	Exclude hyperglycaemia and other causes of non-hypotonic hyponatremia.<br>
+	Check urine osmolality.<br>
+	Check urine sodium concentration.<br>
 </p>
+<p>
+	S-Na+: {{ natrium | floatformat:"0" }}<br>
+	S-Osmo: {{ serumOsmo | floatformat:"0" }}<br>
+	calculated Osmo: {{ osmo_result | floatformat:"0" }}<br>
+  	osmolar Gap: {{ osmo_gap | floatformat:"0" }}<br>
+  	U-Osmo: {{ uosmo | floatformat:"0" }}<br>
+  	U-Na+: {{ unatrium | floatformat:"0" }}<br>
+  	total body water: {{ tbw | floatformat:"0" }}<br>
+</p>
+<p>{{ osmo_warning }}</p>
+<p>{{ uosmo_warning }}</p>
+<p>{{ unatrium_warning }}</p>
+
 {% endblock content %}

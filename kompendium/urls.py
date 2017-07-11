@@ -20,7 +20,10 @@ urlpatterns = [
     # US Bilderlist
     url(r'^echo/(?P<us_bilderliste_id>\d+)/$', views.us_bilderliste, name='us_bilderliste'),
     # Form Test
-    url(r'^rechner/$', views.rechner, name='rechner')
+    url(r'^calcs/$', views.calcs, name='calcs'),
+    url(r'^calcs/hyponatremia$', views.rechner, name='rechner'),
+    # EDIC
+    url(r'^edic/$', views.edic, name='edic'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

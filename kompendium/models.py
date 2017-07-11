@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django import forms
 
 # Create your models here.
 
@@ -98,13 +99,74 @@ class US_Bilderliste(models.Model):
     def __unicode__(self):
         return self.bilderliste_text
 
-#############
-# FORM TEST #
-#############
+################################
+# Form Hyponatriaemie #
+#
+
+# class Calcs(models.Model):
+#     text = models.CharField(max_length=200)
+#     date_added = models.DateTimeField(auto_now_add = True)
+
+#     def __unicode__(self):
+#         return self.text
 
 class Rechner(models.Model):
-    natrium = models.IntegerField()
-    kalium = models.IntegerField()
+    BOOL_CHOICES = ((True, 'male'), (False, 'female'))
+
+    natrium = models.PositiveSmallIntegerField('Na+', null=True)
+    kalium = models.PositiveSmallIntegerField('K+', null=True)
+    alter = models.PositiveSmallIntegerField('Age', null=True)
+    geschlecht = models.BooleanField('Gender',choices=BOOL_CHOICES,default=True)
+    kg = models.PositiveSmallIntegerField('kg', null=True)
+    serumOsmo = models.PositiveSmallIntegerField('S-Osmo', null=True)
+    uosmo = models.PositiveSmallIntegerField('U-Osmo', null=True)
+    unatrium = models.PositiveSmallIntegerField('U-Na+', null=True)
+    blutzucker = models.PositiveSmallIntegerField('Glucose', null=True)
+    bun = models.PositiveSmallIntegerField('BUN', null=True)
 
     def __unicode__(self):
-        return (self.natrium, self.kalium) 
+        return (self.natrium, self.kalium, self.alter, self.geschlecht, self.kg, self.serumOsmo, self.uosmo, self.unatrium, self.blutzucker, self.bun)
+    
+    @staticmethod
+    def calculatedOsmolality(natrium, kalium, blutzucker, bun):
+                natrium = int(natrium)
+                kalium = int(kalium)
+                blutzucker = int(blutzucker)
+                bun = int(bun)
+                osmo_result = (2 * (natrium + kalium) + blutzucker /18 + bun / 2.8)
+                return osmo_result
+
+    @staticmethod
+    def osmolalGap(serumOsmo, osmo_result):
+                serumOsmo = int(serumOsmo)
+                osmo_result = int(osmo_result)
+                osmo_gap = serumOsmo - osmo_result
+                return osmo_gap
+
+    @staticmethod
+    def totalBodyWater(alter, geschlecht, kg):
+        kg = float(kg)
+        alter = int(alter)
+
+        if geschlecht == 'True' and alter < 60:
+            tbw = kg / 100 * 60
+        elif geschlecht == 'False' and alter < 60:
+            tbw = (kg / 100) * 50
+        elif geschlecht == 'True' and alter >= 60:
+            tbw = (kg / 100) * 50
+        else:
+            tbw = (kg / 100) * 45
+        return tbw
+
+  
+
+#############
+# EDIC      # 
+#############
+
+class EDIC(models.Model):
+    text = models.CharField(max_length=200)
+    date_added = models.DateTimeField(auto_now_add = True)
+
+    def __unicode__(self):
+        return self.text
