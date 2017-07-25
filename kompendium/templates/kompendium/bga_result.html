@@ -1,0 +1,62 @@
+{% extends 'kompendium/base.html' %}
+{% load static %}
+
+{% block content %}
+<a href="{% url 'kompendium:bga' %}">Zurück zum Rechner</a>
+<p></p>
+<h4>Summary</h4>
+<p>
+	ph: {{ names.0 }}</br>
+	pCO2: {{ names.1 }}</br>
+	HCO3: {{ names.2 }}</br>
+	BE: {{ names.3 }}</br>
+
+</p>
+<h4>Results Stewart approach</h4>
+<p>
+	pCO2: {{ pco_two_result }}</br>
+	BE: {{ be_result }}</br>
+	pH: {{ ph_result }}</br>
+</p>
+<h5>BE subsets:</h5>
+<p>
+	BEna: {{be_na | floatformat:"0" }}</br>
+	BEcl: {{be_cl | floatformat:"0" }}</br>
+	BEalb: {{be_alb | floatformat:"0" }}</br>
+	BElact: {{be_lact | floatformat:"0" }}</br>
+	BEuma: {{be_uma  | floatformat:"0" }}</br>
+</p>
+<h5>Pathology</h5>
+<p>
+	{{ be_na_diagnosis }}</br>
+	{{ be_cl_diagnosis }}</br>
+	{{ be_alb_diagnosis }}</br>
+	{{ be_lact_diagnosis }}</br>
+	{{ be_uma_diagnosis }}</br>
+</p>
+<p>
+	{% if be_cl < -2 %}
+		<h6>Hyperchloremic acidosis</h6>
+		{{ hyperchlor_acidosis_patho | safe }}</br>
+		{{ hyperchlor_acidosis }}</br>
+		{{ hyperchlor_acidosis_uag }}</br>
+		{{ rta }}<br>
+	{% endif %}
+	{% if be_cl > 2%}
+		<h6>Hypochloremic alkalosis</h6>
+		{{ hypochlor_alkalosis_patho | safe }}
+		{{ hypochlor_alkalosis_cl | safe }}
+	{% endif %}
+</p>
+<p>
+	<img src="/media/documents/lactic_acidosis.jpg" alt="Picture of Rango" /> <!-- Images -->
+</p>
+<p>
+	<b>Results traditional approach</b></br>
+</p>
+<p>
+	Anion gap: {{ anion_gap | floatformat:"0" }}</br>
+	Anion gap albumin adjusted: {{ albumin_adjust | floatformat:"0" }}</br>
+</p>
+
+{% endblock content %}

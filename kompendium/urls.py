@@ -19,9 +19,12 @@ urlpatterns = [
     url(r'^echo/$', views.us_selektion, name='us_selektion'),
     # US Bilderlist
     url(r'^echo/(?P<us_bilderliste_id>\d+)/$', views.us_bilderliste, name='us_bilderliste'),
-    # Form Test
+    # Calculators
     url(r'^calcs/$', views.calcs, name='calcs'),
+        # Hyponatriaemie
     url(r'^calcs/hyponatremia$', views.rechner, name='rechner'),
+        # BGA
+    url(r'^calcs/bga$', views.bga, name='bga'),
     # EDIC
     url(r'^edic/$', views.edic, name='edic'),
 ]
