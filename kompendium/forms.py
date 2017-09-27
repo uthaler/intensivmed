@@ -17,8 +17,8 @@ class RechnerForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_method = 'POST'
     helper.form_class = 'form-horizontal'
-    helper.label_class = 'col-sm-6'
-    helper.field_class = 'col-sm-6'
+    helper.label_class = 'col-sm-2 col-sm-offset-1'
+    helper.field_class = 'col-sm-8' 
     helper.labels_uppercase = True
     helper.layout = Layout(
         Field('natrium', css_class='input-sm'),
