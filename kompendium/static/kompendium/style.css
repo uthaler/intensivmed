@@ -7,7 +7,8 @@ li a {
 }
 
 body {
-  /* background: white url("Unknown.jpeg") no-repeat right bottom; */
+  /* background: url("Unknown.jpeg") no-repeat right bottom; */
+  background-color: #FBF8EF;
   padding-top: 20px;
   padding-bottom: 20px;
 }

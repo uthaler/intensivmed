@@ -6,15 +6,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, inital-scale=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'kompendium/style.css' %}" />
     <title>Intensivmed.at</title>
 
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'kompendium/style.css' %}" />
   </head>
+  
   <body>
      <div class="container">
       <nav class="navbar navbar-inverse navbar-static-top">
+        
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"></button>
           <a class ="navbar-brand" href="{% url 'kompendium:index' %}">Home</a>
@@ -30,13 +33,13 @@
           </ul>
         </div><!--/.nav-collapse -->
       </nav>
-
+  
       <div class="page-header">
         {% block header %}{% endblock header %}
       </div>
       <div class="row center-block">
         {% block content %}{% endblock content %}
       </div>
-    </div><!-- /container -->
+    </div>
   </body>
 </html>

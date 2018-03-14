@@ -164,7 +164,7 @@ def bga(request):
             hyperchlor_acidosis_patho = x.hyperchlor_acidosis_patho()
             hyperchlor_acidosis = x.hyperchlor_acidosis(sodium_urine, potassium_urine, chloride_urine)
             hyperchlor_acidosis_uag = x.hyperchlor_acidosis_uag(sodium_urine, potassium_urine, chloride_urine)
-            rta = x.hyperchlor_acidosis_rta(hyperchlor_acidosis, potassium, urine_ph)
+            rta = x.hyperchlor_acidosis_rta(sodium_urine, potassium_urine, chloride_urine, potassium, urine_ph)
             
             ### hypochloraemische azidose ###
             hypochlor_alkalosis_patho = x.hypochlor_alkalosis_patho()

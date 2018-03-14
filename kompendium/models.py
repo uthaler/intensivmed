@@ -111,7 +111,7 @@ class US_Bilderliste(models.Model):
 #         return self.text
 
 class Rechner(models.Model):
-    BOOL_CHOICES = ((True, 'male'), (False, 'female'))
+    BOOL_CHOICES = ((True, 'maennlich'), (False, 'weiblich'))
 
     natrium = models.PositiveSmallIntegerField('Na+', null=True)
     kalium = models.PositiveSmallIntegerField('K+', null=True)
@@ -387,14 +387,21 @@ class BGA(models.Model):
             hyperchlor_acidosis_result = "Urinary AG positive: RTA, renal failure GFR < 60."
         return hyperchlor_acidosis_result
 
-    def hyperchlor_acidosis_rta(self, urinary_ag, potassium, urine_ph):
-        if not urinary_ag:
+    def hyperchlor_acidosis_rta(self, sodium_urine, potassium_urine, chloride_urine, potassium, urine_ph):
+        if not sodium_urine:
+            return ""
+        if not potassium_urine:
+            return ""
+        if not chloride_urine:
             return ""
         if not potassium:
             return ""
         if not urine_ph:
             return ""
-        urinary_ag = float(urinary_ag)
+        su = float(sodium_urine)
+        pu = float(potassium_urine)
+        cu = float(chloride_urine)
+        urinary_ag = (su + pu) - cu
         potassium = float(potassium)
         urine_ph = float(urine_ph)
         if urinary_ag > 0:

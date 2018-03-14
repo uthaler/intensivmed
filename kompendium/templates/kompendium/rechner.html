@@ -5,16 +5,17 @@
 
   <form action="{% url 'kompendium:rechner' %}" method='post'>
     {% csrf_token %}
-    <div class="container">
-        <div class="center-block col-sm-1"></div>
-        <div class="center-block col-sm-10">
-          <div class="form-group">   
+    <!-- <div class="center-block col-sm-1"></div> -->
+
+      <div class="row">
+       <!--  <div class="center-block col-sm-10"> -->
+          <div class="form-group">
             {% crispy form %}
           </div>
-        </div>
-        <div class="center-block col-sm-1"></div>
-    </div>
-    <!--- <button name="submit">schick los</button> ---!>
+        <!-- </div> -->
+      </div>
+    
+    <!-- <div class="center-block col-sm-1"></div> -->
   </form>
 
 {% endblock content %}

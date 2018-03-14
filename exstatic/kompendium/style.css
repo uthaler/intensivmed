@@ -1,0 +1,49 @@
+p {
+  padding-bottom: 10px;
+}
+
+li a {
+  color: green;
+}
+
+body {
+  /* background: white url("Unknown.jpeg") no-repeat right bottom; */
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.header,
+.marketing,
+.footer {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+/* bootstrap */
+@media (min-width: 768px){
+  .container {
+    max-width: 1000px;
+  }
+}
+
+.panel-heading {
+  text-align: center;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.topic {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.asteriskField {
+    display: none;
+}
