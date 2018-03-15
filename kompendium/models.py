@@ -10,12 +10,22 @@ from django import forms
 # NEWS auf Index #
 ##################
 
+# 13.02.2018 change to blog with tags
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True, default='')
+    def __unicode__(self):
+        return self.name
+
 class News(models.Model):
     news_date_added = models.DateTimeField(auto_now_add = True, null=True, blank=True)
+    news_title = models.CharField(max_length=255, null=True)
     news_text = models.TextField(null=True, blank=True)
+    news_tags = models.ManyToManyField(Tag)
     news_image = models.ImageField(upload_to='documents/', null=True, blank=True)
     def __unicode__(self):
-        return self.news_text[:20]
+        return self.news_text
 
 ###############
 # KOMPENDIUM  #

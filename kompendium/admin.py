@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from kompendium.models import Topic, Subtopic, Entry, Kategorie, Link, US_Selektion, US_Bilderliste, News, EDIC
+from kompendium.models import Topic, Subtopic, Entry, Kategorie, Link, US_Selektion, US_Bilderliste, News, EDIC, Tag
 
 # Register your models here.
 admin.site.register(Topic)
@@ -12,3 +12,4 @@ admin.site.register(US_Selektion)
 admin.site.register(US_Bilderliste)
 admin.site.register(News)
 admin.site.register(EDIC)
+admin.site.register(Tag)

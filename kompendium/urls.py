@@ -7,6 +7,8 @@ from . import views
 urlpatterns = [
     # Home page
     url(r'^$', views.index, name='index'),
+    # Home page Blog mit tags
+    url(r'^tagspage/(?P<pk>\d+)/$', views.tagspage, name='tagspage'),
     # Topics
     url(r'^topics/$', views.topics, name='topics'),
     # Subtopics

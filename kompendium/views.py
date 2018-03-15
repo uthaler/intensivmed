@@ -1,14 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Topic, Subtopic, Entry, Kategorie, Link, US_Selektion, US_Bilderliste, News, EDIC, Rechner, BGA
+from .models import Topic, Subtopic, Entry, Kategorie, Link, US_Selektion, US_Bilderliste, News, EDIC, Rechner, BGA, Tag
 from .forms import RechnerForm, BGAForm
 
 # Create your views here.
 
 def index(request):
+
     """ the home page for intensivmed """
+    #tags importieren
+    tags = Tag.objects.get(id=1)
+    #tag = tags.news_set.get(id=17)
+    tag = tags.news_set.all()
+
+    tagss = Tag.objects.all()
+
     news_list = News.objects.order_by('-news_date_added')
     #news_list = News.objects.all()
     page = request.GET.get('page', 1)
@@ -21,8 +29,24 @@ def index(request):
     except EmptyPage:
         news = paginator.page(paginator.num_pages)
 
-    context = {'news' : news}
+    context = {'news' : news, 'tag' : tag, 'tagss' : tagss}
+
     return render(request, 'kompendium/index.html', context)
+
+def tagspage(request, pk):
+        tag = get_object_or_404(Tag, pk=pk)
+        blog = tag.news_set.all()
+        return render (request, 'kompendium/tagspage.html', {'tag' : tag, 'blog' : blog})
+        # if request.method=='GET':
+        #     #post = Tag.objects.get(pk=pk)
+        #     taggie = request.GET.get('t.name')
+        #     if not taggie:
+        #         return render(request, 'kompendium/topics.html')
+        #     else:
+        #         tag = Tag.objects.get(name=taggie)
+        #         return render(request, 'kompendium/tagspage.html', {'tag' : tag})
+        # else:
+        #     return render(request, 'kompendium/subtopics.html')
 
 def topics(request):
     """ Show all topics """

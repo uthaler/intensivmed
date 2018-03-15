@@ -1,0 +1,29 @@
+{% extends 'kompendium/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<!-- <p>{{ tag.name }}</p>
+<p>{{ tag.description }}</p> -->
+
+<div class="col-sm-8">
+
+{% for bloggie in blog %}
+  <div class="blog_item">
+    <h4>{{ bloggie.news_title }}</h4>
+    <p id="date_style">{{ bloggie.news_date_added }}</p>
+    <p>{{ bloggie.news_text }}</p>
+  </div>
+{% endfor %}
+
+</div>
+
+<div class="col-sm-3 col-sm-offset-1">
+  <a href="{% url 'kompendium:index' %}" class="btn-default btn-sm" class="text-dark">
+    <span class="glyphicon glyphicon-menu-left"></span> zurueck
+  </a>
+
+  <!-- <a class="glyphicon glyphicon-menu-left" href="{% url 'kompendium:index' %}"  role="button">zum index</a> -->
+</div>
+
+{% endblock content %}

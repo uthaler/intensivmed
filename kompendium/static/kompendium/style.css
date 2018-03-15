@@ -1,6 +1,122 @@
-p {
-  padding-bottom: 10px;
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    z-index: 3;
+    color: black;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
 }
+.pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > span:focus, .pagination > li > span:hover {
+    z-index: 2;
+    color: black;
+    background-color: #eee;
+    border-color: #ddd;
+}
+.pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > span:focus, .pagination > li > span:hover {
+    z-index: 2;
+    color: black;
+    background-color: #eee;
+    border-color: #ddd;
+}
+.pagination > li > a, .pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: black;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+        border-top-color: rgb(221, 221, 221);
+        border-right-color: rgb(221, 221, 221);
+        border-bottom-color: rgb(221, 221, 221);
+        border-left-color: rgb(221, 221, 221);
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+  /* background: url("Unknown.jpeg") no-repeat right bottom; */
+  background-color: #FBF8EF;
+  /*font-family: 'Rubik', serif;
+  font-size: 12px;*/
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#date_style {
+  font-weight: 300;
+  font-size: 80%;
+}
+
+.blog_item {
+  color: black;
+  background-color: white;
+  margin-top: 10px;
+  padding: 10px 10px 10px 10px;
+  width: 90%;
+}
+
+.tags {
+  list-style: none;
+  margin: 0;
+  overflow: hidden; 
+  padding: 0;
+}
+
+.tags li {
+  float: left; 
+}
+
+.tag {
+  background: #eee;
+  border-radius: 3px 0 0 3px;
+  color: #999;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 23px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+
+.tag::before {
+  background: #FBF8EF;
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+  content: '';
+  height: 6px;
+  left: 10px;
+  position: absolute;
+  width: 6px;
+  top: 10px;
+}
+
+.tag::after {
+  background: #FBF8EF;
+  border-bottom: 13px solid transparent;
+  border-left: 10px solid #eee;
+  border-top: 13px solid transparent;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.tag:hover {
+  background-color: crimson;
+  color: #FBF8EF;
+}
+
+.tag:hover::after {
+   border-left-color: crimson; 
+}
+
 
 li a {
   color: green;
@@ -9,6 +125,8 @@ li a {
 body {
   /* background: url("Unknown.jpeg") no-repeat right bottom; */
   background-color: #FBF8EF;
+  /*font-family: 'Rubik', serif;
+  font-size: 12px;*/
   padding-top: 20px;
   padding-bottom: 20px;
 }
