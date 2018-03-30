@@ -1,3 +1,12 @@
+
+/* ================================================================= */
+/* BOOTSTRAP modifications */
+
+
+.well .well{
+  background-color: lawngreen;
+}
+
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
     z-index: 3;
     color: black;
@@ -38,6 +47,8 @@
     box-sizing: border-box;
 }
 
+/* ================================================================= */
+
 body {
   /* background: url("Unknown.jpeg") no-repeat right bottom; */
   background-color: #FBF8EF;
@@ -45,9 +56,15 @@ body {
   font-size: 12px;*/
   padding-top: 20px;
   padding-bottom: 20px;
+  overflow-wrap: break-word;
 }
 
 #date_style {
+  font-weight: 300;
+  font-size: 80%;
+}
+
+#bga_comment_style {
   font-weight: 300;
   font-size: 80%;
 }
@@ -166,3 +183,5 @@ h1 {
 .asteriskField {
     display: none;
 }
+
+

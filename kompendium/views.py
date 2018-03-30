@@ -156,15 +156,43 @@ def bga(request):
             albumin = form.cleaned_data['albumin']
             phosphate = form.cleaned_data['phosphate']
             lactate = form.cleaned_data['lactate']
+            serumOsmo = form['serumOsmo'].value()
+            uosmo = form['uosmo'].value()
+            blutzucker = form['blutzucker'].value()
+            bun = form['bun'].value()
             sodium_urine = form['sodium_urine'].value()
             potassium_urine = form['potassium_urine'].value()
             chloride_urine = form['chloride_urine'].value()
             potassium = form['potassium'].value()
             urine_ph = form['urine_ph'].value()
 
-            names = [ph, pco_two, bicarbonate, base_excess]
-
+            list_names = (ph, pco_two, bicarbonate, base_excess, lactate, serumOsmo, uosmo, blutzucker, bun, sodium, potassium, chloride, phosphate, albumin, urine_ph, sodium_urine, potassium_urine
+                , chloride_urine)
+            
             x = BGA()
+
+            # check the primary acid base disorder
+            ph_text = x.check_ph(ph, pco_two, bicarbonate, base_excess)
+
+            # adequate response ?
+            expected_results = x.expected_results(ph, pco_two, bicarbonate, base_excess)
+
+            # check for complex acid base disorder
+            secondary_abd = x.secondary_abd(ph, pco_two, bicarbonate, base_excess)
+
+            # check for lactic acidosis
+            lactic_acidosis = x.lactic_acidosis(lactate, sodium, bicarbonate, chloride)
+            lactate_ag_effect = x.lactate_ag_effect(lactate, sodium, bicarbonate, chloride)
+
+            # osmolal gap
+            osmo_result = x.calculatedOsmolality(sodium, potassium, blutzucker, bun)
+            osmo_gap = x.osmolalGap(serumOsmo, osmo_result, sodium, potassium, blutzucker, bun)
+
+            osmolar_gap = int(serumOsmo) - int(osmo_result)
+            
+
+
+
 
             pco_two_result = x.pco_two_checker(pco_two)
             be_result = x.be_checker(base_excess)
@@ -196,9 +224,11 @@ def bga(request):
 
             #traditional approach
             anion_gap = x.anion_gap(sodium, bicarbonate, chloride)
-            albumin_adjust = x.albumin_adjust(albumin, phosphate)
+            albumin_adjust = x.albumin_adjust(albumin, phosphate, sodium, bicarbonate, chloride)
             #check_ph = x.check_ph(ph, pco_two, bicarbonate, base_excess)
-            #expected_results = x.expected_results(ph, pco_two, bicarbonate, base_excess)
+            anion_gap_check = x.anion_gap_check(albumin, phosphate, sodium, bicarbonate, chloride)
+            compare_be_ag = x.compare_be_ag(base_excess, sodium, bicarbonate, chloride)
+            
             #checker_ergebnis = x.checker(bicarbonate, expected_results)
 
             #if check_ph == "Metabolic acidosis":
@@ -209,8 +239,21 @@ def bga(request):
             #    albumin_adjust = 0
 
             #context = {'names' : names, 'check_ph' : check_ph, 'expected_results' : expected_results, 'anion_gap' : anion_gap, 'albumin_adjust' : albumin_adjust}
-            context = {'names' : names, 'pco_two_result' : pco_two_result, 'be_result' : be_result, 'ph_result' : ph_result, 'be_na' : be_na, 'be_cl' : be_cl, 'be_lact' : be_lact, 'be_alb' : be_alb, 'be_uma' : be_uma, 'anion_gap' : anion_gap, 'albumin_adjust' : albumin_adjust, 'be_na_diagnosis' : be_na_diagnosis, 'be_cl_diagnosis' : be_cl_diagnosis, 'be_alb_diagnosis' : be_alb_diagnosis, 'be_lact_diagnosis' : be_lact_diagnosis, 'be_uma_diagnosis' : be_uma_diagnosis, 'hyperchlor_acidosis' : hyperchlor_acidosis, 'hyperchlor_acidosis_uag' : hyperchlor_acidosis_uag, 'hypochlor_alkalosis_cl' : hypochlor_alkalosis_cl, 'rta' : rta, 'hypochlor_alkalosis_patho' : hypochlor_alkalosis_patho, 'hyperchlor_acidosis_patho' : hyperchlor_acidosis_patho}
-            return render(request, 'kompendium/bga_result.html', context)
+            context = {'osmolar_gap' : osmolar_gap, 'osmo_result' : osmo_result, 'osmo_gap' : osmo_gap, 'lactic_acidosis' : lactic_acidosis, 'secondary_abd' : secondary_abd, 'ph_text' : ph_text, 'list_names' : list_names, 'pco_two_result' : pco_two_result, 'be_result' : be_result, 'ph_result' : ph_result, 'be_na' : be_na, 'be_cl' : be_cl, 'be_lact' : be_lact, 'be_alb' : be_alb, 'be_uma' : be_uma, 'anion_gap' : anion_gap, 'albumin_adjust' : albumin_adjust, 'be_na_diagnosis' : be_na_diagnosis, 'be_cl_diagnosis' : be_cl_diagnosis, 'be_alb_diagnosis' : be_alb_diagnosis, 'be_lact_diagnosis' : be_lact_diagnosis, 'be_uma_diagnosis' : be_uma_diagnosis, 'hyperchlor_acidosis' : hyperchlor_acidosis, 'hyperchlor_acidosis_uag' : hyperchlor_acidosis_uag, 'hypochlor_alkalosis_cl' : hypochlor_alkalosis_cl, 'rta' : rta, 'hypochlor_alkalosis_patho' : hypochlor_alkalosis_patho, 'hyperchlor_acidosis_patho' : hyperchlor_acidosis_patho, 'expected_results' : expected_results, 'anion_gap_check' : anion_gap_check, "compare_be_ag" : compare_be_ag, "lactate_ag_effect" : lactate_ag_effect}
+            if ph_text == "Metabolic acidosis":
+                return render(request, 'kompendium/bga_result.html', context)
+            elif ph_text == "Acute respiratory acidosis":
+                return render(request, 'kompendium/bga_result_rac.html', context)
+            elif ph_text == "Chronic respiratory acidosis":
+                return render(request, 'kompendium/bga_result_rac.html', context)
+            elif ph_text == "Metabolic alkalosis":
+                return render(request, 'kompendium/bga_result_ma.html', context)
+            elif ph_text == "Acute respiratory alkalosis":
+                return render(request, 'kompendium/bga_result_ralk.html', context)
+            elif ph_text == "Chronic respiratory alkalosis":
+                return render(request, 'kompendium/bga_result_ralk.html', context)
+            else:
+                return render(request, 'kompendium/bga_calc.html', context)
 
     context = {'form' : form}
     return render(request, 'kompendium/bga_calc.html', context)

@@ -10,21 +10,48 @@
 <p></p>
 
 <div class="row">
-	<div class="well well-sm col-sm-2 col-xs-4">
+	<div class="well well-sm col-sm-7 col-xs-7">
 		<h4>Summary</h4>
 		<p>
-			ph: {{ names.0 }}</br>
-			pCO2: {{ names.1 }}</br>
-			HCO3: {{ names.2 }}</br>
-			BE: {{ names.3 }}</br>
+			pH : {{ list_names.0 }}</br>
+			pCO2 : {{ list_names.1 }}</br>
+			HCO3 : {{ list_names.2 }}</br>
+			BE: {{ list_names.3 }}</br>
+			Lactate: {{ list_names.4 }}</br>
+			Serum Osmo: {{ list_names.5 }}</br>
+			Harn Osmo: {{ list_names.6 }}</br>
+			Blutzucker: {{ list_names.7 }}</br>
+			BUN: {{ list_names.8 }}</br>
+			Na: {{ list_names.9 }}</br>
+			K: {{ list_names.10 }}</br>
+			Cl: {{ list_names.11 }}</br>
+			PO4: {{ list_names.12 }}</br>
+			Albumin: {{ list_names.13 }}</br>
+			Urine pH: {{ list_names.14 }}</br>
+			Urine Na: {{ list_names.15 }}</br>
+			Urine K: {{ list_names.16 }}</br>
+			Urine Cl: {{ list_names.17 }}</br>
 		</p>
+		<p>
+			simple acid base disorder:</br> 
+			<b>{{ ph_text }}</b>
+		</p>
+		<p>
+			normal compensatory changes?</br>
+			{{ expected_results }}
+		</p>
+		<p>
+			secondary acid base disorder:</br>
+			<b>{{ secondary_abd }}</b>
+		</p>
+
 	</div>
 </div>
 
 
 <div class="row">
 	<div class="well well-sm col-sm-3">
-		<h4>Results Stewart approach</h4>
+		<h4>Stewart approach</h4>
 			<p>
 				pCO2: {{ pco_two_result }}</br>
 				BE: {{ be_result }}</br>
@@ -62,12 +89,44 @@
 		</p>
 	</div>
 
-	<div class="well well-sm col-sm-3 col-sm-offset-1">
-		<h4>Results traditional approach</h4></br>
-		<p>
-			Anion gap: {{ anion_gap | floatformat:"0" }}</br>
-			Anion gap albumin adjusted: {{ albumin_adjust | floatformat:"0" }}</br>
-		</p>
+	<div class="well col-sm-3 col-sm-offset-1">
+		<h4>Traditional approach</h4></br>
+			<h5 class="well well-sm" style="background-color: orangered;">Anion Gap</h5>
+				<p>
+					Anion gap: {{ anion_gap | floatformat:"0" }}</br>
+					<span id="bga_comment_style">AG = Na - K - Cl - HCO3 (all mmol/l). normal value 8-12 mmol/l.</span>
+				</p>
+				<p>
+					Anion gap albumin and phosphate adjusted: {{ albumin_adjust | floatformat:"0" }}</br>
+					<span id="bga_comment_style">AG adjusted for albumin and phosphate = 0.2 * albumin (g/dl) + 1.5 * phosphate (mmol/l)</span>
+				</p>
+				<p class="well well-sm">
+					{{ anion_gap_check | stringformat:"s" | safe }}
+				</p>
+				<p class="well well-sm">
+					{{ compare_be_ag | safe}}
+				</p>
+				<p class="well well-sm">
+					{{ lactic_acidosis | safe}}
+				</p>
+				<p class="well well-sm">
+					{{ lactate_ag_effect | safe}}
+				</p>
+				<p>High anion gap acidosis: check osmolar gap</p>
+				<p>expected result {{ expected_results | stringformat:"s" }}</p>
+			<h5 class="well well-sm" style="background-color: orangered;">Osmolar Gap</h5>
+				<p>
+					calculated Osmolarity: {{ osmo_result | floatformat:"0" | safe }}</br>
+					<span id="bga_comment_style">mOsmol/l</p></span>
+					Osmolar Gap: {{ osmolar_gap | floatformat:"0" }}
+				</p>
+				<p class="well well-sm">
+					{{ osmo_gap | safe}} 
+				</p>
+			<h5 class="well well-sm" style="background-color: orangered;">Urinary Anion gap</h5>
+				<p>
+					Urinary anion gap: {{ hyperchlor_acidosis | floatformat:"0" }}
+				</p>
 	</div>
 </div>
 

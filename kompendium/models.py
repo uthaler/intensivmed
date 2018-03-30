@@ -204,15 +204,21 @@ class Rechner(models.Model):
 # BGA Rechner #
 ###############
 class BGA(models.Model):
-    ph = models.DecimalField(max_digits=5, decimal_places=2,  null=True)
+    ph = models.DecimalField('pH',max_digits=5, decimal_places=2,  null=True)
     bicarbonate = models.DecimalField('HCO3', null=True, max_digits=5, decimal_places=2, blank=True)
     pco_two = models.DecimalField('pCO2', null=True, max_digits=5, decimal_places=2)
     base_excess = models.DecimalField('BE', null=True, max_digits=5, decimal_places=2)
     
-    lactate = models.DecimalField('Lactate', null=True, max_digits=5, decimal_places=2)
-    sodium = models.DecimalField('Na', null=True, max_digits=5, decimal_places=2)
-    potassium = models.DecimalField('K', null=True, max_digits=5, decimal_places=2, blank=True)
-    chloride = models.DecimalField('Cl', null=True, max_digits=5, decimal_places=2)
+    lactate = models.DecimalField('Laktat', null=True, max_digits=5, decimal_places=2)
+    
+    serumOsmo = models.PositiveSmallIntegerField('S-Osmo', null=True)
+    uosmo = models.PositiveSmallIntegerField('U-Osmo', null=True)
+    blutzucker = models.PositiveSmallIntegerField('Glucose', null=True, blank=True)
+    bun = models.PositiveSmallIntegerField('BUN', null=True, blank=True)
+
+    sodium = models.DecimalField('Na+', null=True, max_digits=5, decimal_places=2)
+    potassium = models.DecimalField('K+', null=True, max_digits=5, decimal_places=2, blank=True)
+    chloride = models.DecimalField('Cl-', null=True, max_digits=5, decimal_places=2)
     albumin = models.DecimalField('Albumin', null=True, max_digits=5, decimal_places=2, blank=True)
     phosphate = models.DecimalField('PO4', null=True, max_digits=5, decimal_places=2, blank=True)
     po_two = models.DecimalField('pO2', null=True, max_digits=5, decimal_places=2, blank=True)
@@ -446,67 +452,258 @@ class BGA(models.Model):
             chloride = "chloride unresponsive (U-Cl > 20 mmol/l)"
         return chloride
 
-    def check_ph(self, ph, pco_two, bicarbonate, base_excess):
-        ph = float(ph)
-        base_excess = float(base_excess)
-        pco_two = float(pco_two)
-        if ph < 7.35 and base_excess < -2:
-             ph_text = "Metabolic acidosis"
-        elif ph < 7.35 and pco_two > 45 and base_excess > -2 and base_excess < 2:
-            ph_text = "Acute respiratory acidosis"
-        elif ph < 7.35 and pco_two > 45 and base_excess > 2:
-            ph_text ="Chronic respiratory acidosis"
-        elif ph > 7.45 and base_excess > 2:
-            ph_text = "Metabolic Alkalosis"
-        elif ph > 7.45 and pco_two < 35 and base_excess > -2 and base_excess < 2:
-            ph_text = "Acute respiratory alkalosis"
-        elif ph > 7.45 and pco_two < 35 and base_excess < -2:
-            ph_text = "Chronic respiratory alkalosis"
-        else:
-            ph_text = "nix"
-        return ph_text
+    
 
 
 ############ TRADITIONAL APPROACH ########################
 
     def anion_gap(self, sodium, bicarbonate, chloride):
         if not sodium:
-            return "Anion gap cannot be calculated: missing value"
+            return "Anion gap cannot be calculated: S-Na+ missing"
         if not bicarbonate:
-            return "Anion gap cannot be calculated: missing value"
+            return "Anion gap cannot be calculated: Bicarbonate missing"
         if not chloride:
-            return "Anion gap cannot be calculated: missing value"
+            return "Anion gap cannot be calculated: S-Chloride missing"
         sodium = float(sodium)
         bicarbonate = float(bicarbonate)
         chloride = float(chloride)
         anion_gap = sodium - (bicarbonate + chloride)
         return anion_gap
 
-    def albumin_adjust(self, albumin, phosphate):
+    def albumin_adjust(self, albumin, phosphate, sodium, bicarbonate, chloride):
         if not albumin:
             return "Anion gap albumin adjusted cannot be calculated: missing value"
         if not phosphate:
             return "Anion gap albumin adjusted cannot be calculated: missing value"
         albumin = float(albumin)
         phosphate = float(phosphate)
+        sodium = float(sodium)
+        bicarbonate = float(bicarbonate)
+        chloride = float(chloride)
+        anion_gap = sodium - (bicarbonate + chloride)
         albumin_adjust = 0.2 * albumin + 1.5 * phosphate
+        # if albumin_adjust < anion_gap:
+        #     ergebnis = "expected anion gap > adjusted anion gap -> high anion gap acidosis."
+        #     explanation = "The normal difference between cations and anions is made up predominantely by albumin and phosphate."
+        # else:
+        #     ergebnis = "expected anion gap <= adjusted anion gap -> normal anion gap acidosis."
         return albumin_adjust
+
+    def anion_gap_check(self, albumin, phosphate, sodium, bicarbonate, chloride):
+        if not albumin:
+            return "Anion gap albumin adjusted cannot be calculated: Albumin missing"
+        if not phosphate:
+            return "Anion gap albumin adjusted cannot be calculated: Phosphate missing"
+        if not sodium:
+            return "Anion gap cannot be calculated: Na missing"
+        if not bicarbonate:
+            return "Anion gap cannot be calculated: Bicarbonate missing"
+        if not chloride:
+            return "Anion gap cannot be calculated: Chloride missing"
+        albumin = float(albumin)
+        phosphate = float(phosphate)
+        sodium = float(sodium)
+        bicarbonate = float(bicarbonate)
+        chloride = float(chloride)
+        anion_gap = sodium - (bicarbonate + chloride)
+        albumin_adjust = 0.2 * albumin + 1.5 * phosphate
+        if albumin_adjust < anion_gap:
+            ergebnis = "<b>high anion gap acidosis</b><br><span id=\"bga_comment_style\">expected anion gap larger than adjusted anion gap.The normal difference between cations and anions is made up predominantely by albumin and phosphate.</span>"
+        else:
+            ergebnis = "<b>normal anion gap acidosis</b><br><span id=\"bga_comment_style\">expected anion gap smaller than adjusted anion gap. Abnormalities in chloride homeostasis.</span>"
+        return ergebnis
+
+    def compare_be_ag(self, base_excess, sodium, bicarbonate, chloride):
+        if not sodium:
+            return "Anion gap cannot be calculated: S-Na+ missing"
+        if not bicarbonate:
+            return "Anion gap cannot be calculated: Bicarbonate missing"
+        if not chloride:
+            return "Anion gap cannot be calculated: S-Chloride missing"
+        if not base_excess:
+            return "BE missing"
+        sodium = float(sodium)
+        bicarbonate = float(bicarbonate)
+        chloride = float(chloride)
+        base_excess = float(base_excess)
+        anion_gap = sodium - (bicarbonate + chloride)
+        if base_excess + (anion_gap-12) < 0:
+            ergebnis = "Change in BE larger than change AG: additional <b>hyperchloraemic acidosis</b> present.<br><span id=\"bga_comment_style\">The change in BE should be equal to the increase of AG from baseline (8-12 mmol/l).</p></span>"       
+        else:
+            ergebnis = "BE change is not larger than the change in AG. <br><span id=\"bga_comment_style\">If BE change > AG change hyperchloraemic acidosis present </p></span>"
+        return ergebnis
+
+    def lactic_acidosis(self, lactate, sodium, bicarbonate, chloride):
+        if not sodium:
+            return "Anion gap cannot be calculated: S-Na+ missing"
+        if not bicarbonate:
+            return "Anion gap cannot be calculated: Bicarbonate missing"
+        if not chloride:
+            return "Anion gap cannot be calculated: S-Chloride missing"
+        if not lactate:
+            return "Lactate value missing"
+        anion_gap = sodium - (bicarbonate + chloride)
+        if (anion_gap>12) and lactate > 2:
+            ergebnis = "<b>Lactic acidosis</b></br><span id=\"bga_comment_style\">lactate > 2 mmol/l</span>"
+        else:
+            ergebnis = "High anion gap acidosis, lactate not increased.</br><span id=\"bga_comment_style\">lactate < 2 mmol/l</span>"
+        return ergebnis
+
+    def lactate_ag_effect(self, lactate, sodium, bicarbonate, chloride):
+        if not sodium:
+            return "Anion gap cannot be calculated: S-Na+ missing"
+        if not bicarbonate:
+            return "Anion gap cannot be calculated: Bicarbonate missing"
+        if not chloride:
+            return "Anion gap cannot be calculated: S-Chloride missing"
+        if not lactate:
+            return "Lactate value missing"
+        anion_gap = sodium - (bicarbonate + chloride)
+        if (anion_gap-12) - lactate > 0:
+            ergebnis = "Increase in AG larger than increase in lactate: other acid must be present. </br><span id=\"bga_comment_style\">considering lactate produces a 1:1 decrement in AG (controversial)</span>"
+        else:
+            ergebnis = "Increase in AG equals increase in lactate: pure lactic acidosis? </br><span id=\"bga_comment_style\">considering lactate produces a 1:1 decrement in AG (controversial)</span>"
+        return ergebnis
+
+
+    def check_ph(self, ph, pco_two, bicarbonate, base_excess):
+        ph = float(ph)
+        base_excess = float(base_excess)
+        pco_two = float(pco_two)
+        if ph < 7.35 and base_excess < -2:
+             ph_text = "Metabolic acidosis"
+        elif ph < 7.35 and pco_two > 45 and base_excess >= -2 and base_excess <= 2:
+            ph_text = "Acute respiratory acidosis"
+        elif ph < 7.35 and pco_two > 45 and base_excess > 2:
+            ph_text ="Chronic respiratory acidosis"
+        elif ph > 7.45 and base_excess > 2:
+            ph_text = "Metabolic alkalosis"
+        elif ph > 7.45 and pco_two < 35 and base_excess >= -2 and base_excess <= 2:
+            ph_text = "Acute respiratory alkalosis"
+        elif ph > 7.45 and pco_two < 35 and base_excess < -2:
+            ph_text = "Chronic respiratory alkalosis"
+        else:
+            ph_text = "???"
+        return ph_text
 
     def expected_results(self, ph, pco_two, bicarbonate, base_excess):
         ph = float(ph)
         pco_two = float(pco_two)
         bicarbonate = float(bicarbonate)
         base_excess = float(base_excess)
-        if ph < 7.35 and base_excess <-2:
+        if ph < 7.35 and base_excess < -2: # metabolic acidosis
             expected_pco_two = 40 + base_excess
-            ergebnis = "Expected pCO2 is: " + str(expected_pco_two)
-        elif ph < 7.35 and pco_two > 45 and base_excess > -2 and base_excess < 2:
+            expected_pco_two = int(expected_pco_two)
+            ergebnis = "Expected pCO2 is " + str(expected_pco_two) + " +/- 2."
+        elif ph < 7.35 and pco_two > 45 and base_excess >= -2 and base_excess <= 2: # acute respiratory acidosis
             expected_bicarbonate = ((pco_two - 40) / 10) + 24
-            ergebnis = "Expected HCO3 is: " + str(expected_bicarbonate)
+            ergebnis = "Expected HCO3 is: " + str(expected_bicarbonate) + " +/- 2."
+        elif ph < 7.35 and pco_two > 45 and base_excess > 2: # chronic respiratory acidosis
+            expected_bicarbonate = int(((pco_two - 40) / 3) + 24)
+            ergebnis = "Expected HCO3 is: " + str(expected_bicarbonate) + " +/- 2."
+        elif ph > 7.45 and base_excess > 2: # metabolic alkalosis
+            expected_pco_two = 40 + (0.6 * base_excess)
+            expected_pco_two = int(expected_pco_two)
+            ergebnis = "Expected pCO2 is " + str(expected_pco_two) + " +/- 2."
+        elif ph > 7.45 and pco_two < 35 and base_excess >= -2 and base_excess <= 2: # acute respiratory alkalosis
+            expected_bicarbonate = int(((40 - pco_two) / 5) + 24)
+            ergebnis = "Expected HCO3 is: " + str(expected_bicarbonate) + " +/- 2."
+        elif ph > 7.45 and pco_two < 35 and base_excess < -2: # chronic respiratory alkalosis
+            expected_bicarbonate = int(((40 - pco_two) / 2) + 24)
+            ergebnis = "Expected HCO3 is: " + str(expected_bicarbonate) + " +/- 2."
         else:
-            ergebnis = pco_two
+            ergebnis = "???"
         return ergebnis
 
+    def secondary_abd(self, ph, pco_two, bicarbonate, base_excess):
+        ph = float(ph)
+        pco_two = float(pco_two)
+        bicarbonate = float(bicarbonate)
+        base_excess = float(base_excess)
+        if ph < 7.35 and base_excess < -2: # metabolic acidosis
+            expected_pco_two = 40 + base_excess
+            if pco_two > (expected_pco_two + 2):
+                result = "Respiratory acidosis"
+            elif pco_two < (expected_pco_two - 2):
+                result = "Respiratory alkalosis"
+        elif ph < 7.35 and pco_two > 45 and base_excess >= -2 and base_excess <= 2: # acute respiratory acidosis
+            expected_bicarbonate = ((pco_two - 40) / 10) + 24
+            if bicarbonate > expected_bicarbonate:
+                result = "Metabolic alkalosis"
+            elif bicarbonate < expected_bicarbonate:
+                result = "Metabolic acidosis"
+        elif ph < 7.35 and pco_two > 45 and base_excess > 2: # chronic respiratory acidosis
+            expected_bicarbonate = int(((pco_two - 40) / 3) + 24)
+            if bicarbonate > expected_bicarbonate:
+                result = "Metabolic alkalosis"
+            elif bicarbonate < expected_bicarbonate:
+                result = "Metabolic acidosis"
+        elif ph > 7.45 and base_excess > 2: # metabolic alkalosis
+            expected_pco_two = 40 + (0.6 * base_excess)
+            expected_pco_two = int(expected_pco_two)
+            if pco_two > expected_pco_two:
+                result = "Respiratory acidosis"
+            elif pco_two < expected_pco_two:
+                result = "Respiratory alkalosis"
+        elif ph > 7.45 and pco_two < 35 and base_excess >= -2 and base_excess <= 2: # acute respiratory alkalosis
+            expected_bicarbonate = int(((40 - pco_two) / 5) + 24)
+            if bicarbonate > expected_bicarbonate:
+                result = "Metabolic alkalosis"
+            elif bicarbonate < expected_bicarbonate:
+                result = "Metabolic acidosis"
+        elif ph > 7.45 and pco_two < 35 and base_excess < -2: # chronic respiratory alkalosis
+            expected_bicarbonate = int(((40 - pco_two) / 2) + 24)
+            if bicarbonate > expected_bicarbonate:
+                result = "Metabolic alkalosis"
+            elif bicarbonate < expected_bicarbonate:
+                result = "Metabolic acidosis"
+        else:
+            result = "???"
+        return result
+
+    def osmolalGap(self, serumOsmo, osmo_result, natrium, kalium, blutzucker, bun):
+        if not serumOsmo:
+            return "Osmolal gap cannot be calculated: missing value"
+        if not osmo_result:
+            return "Osmolal gap cannot be calculated: missing value"
+        if not natrium:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not kalium:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not blutzucker:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not bun:
+            return "Calculated Osmo cannot be calculated: missing value"
+        serumOsmo = int(serumOsmo)
+        osmo_result = int(osmo_result)
+        natrium = int(natrium)
+        kalium = int(kalium)
+        blutzucker = int(blutzucker)
+        bun = int(bun)
+        osmo_result = (2 * (natrium + kalium) + blutzucker /18 + bun / 2.8)
+        osmo_gap = serumOsmo - osmo_result
+        if osmo_gap > 10:
+            result = "Osmolar gap increased, indicative of <b>toxin</b> that increases osmolarity."
+        else:
+            result = "Osmolar gap not increased."
+        return result
+
+    def calculatedOsmolality(self, natrium, kalium, blutzucker, bun):
+        if not natrium:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not kalium:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not blutzucker:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not bun:
+            return "Calculated Osmo cannot be calculated: missing value"
+        natrium = int(natrium)
+        kalium = int(kalium)
+        blutzucker = int(blutzucker)
+        bun = int(bun)
+        osmo_result = (2 * (natrium + kalium) + blutzucker /18 + bun / 2.8)
+        return osmo_result
+             
         #da passt was nicht
     # def checker(self, expected_results, bicarbonate):
     #     expected_results = float(expected_results)

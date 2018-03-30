@@ -20,7 +20,7 @@ class RechnerForm(forms.ModelForm):
     #helper.form_show_labels = False # hides the labels
     helper.label_class = 'col-sm-2 col-sm-offset-3'
     helper.field_class = 'col-sm-3' 
-    helper.labels_uppercase = True
+    helper.labels_uppercase = False
     helper.layout = Layout(
         Field('natrium', css_class='input-sm', placeholder="S-Na+ mmol/l"),
         Field('kalium', css_class='input-sm', placeholder="S-K+ mmol/l"),
@@ -45,14 +45,14 @@ class BGAForm(forms.ModelForm):
     
     class Meta:
         model = BGA
-        fields = ['ph', 'bicarbonate', 'pco_two', 'base_excess', 'sodium', 'potassium','chloride', 'albumin', 'phosphate', 'lactate', 'sodium_urine', 'potassium_urine', 'chloride_urine', 'urine_ph']
+        fields = ['ph', 'bicarbonate', 'pco_two', 'base_excess', 'sodium', 'potassium','chloride', 'albumin', 'phosphate', 'lactate', 'serumOsmo', 'uosmo', 'blutzucker', 'bun', 'sodium_urine', 'potassium_urine', 'chloride_urine', 'urine_ph']
 
     helper = FormHelper()
     helper.form_method = 'POST'
     helper.form_class = 'form-horizontal'
     helper.label_class = 'col-sm-2 col-sm-offset-3'
     helper.field_class = 'col-sm-3'
-    helper.labels_uppercase = True
+    helper.form_show_labels = True
     helper.layout = Layout(    
         Field('ph', css_class='input-sm'),
         Field('pco_two', css_class='input-sm'),
@@ -64,6 +64,10 @@ class BGAForm(forms.ModelForm):
         Field('albumin', css_class='input-sm'),
         Field('phosphate', css_class='input-sm'),
         Field('lactate', css_class='input-sm'),
+        Field('serumOsmo', css_class='input-sm'),
+        Field('uosmo', css_class='input-sm'),
+        Field('blutzucker', css_class='input-sm'),
+        Field('bun', css_class='input-sm'),
         Field('sodium_urine', css_class='input-sm'),
         Field('potassium_urine', css_class='input-sm'),
         Field('chloride_urine', css_class='input-sm'),

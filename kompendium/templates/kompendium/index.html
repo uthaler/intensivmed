@@ -8,12 +8,13 @@
 
     {% for new in news %}
       <div class="blog_item">
+        {% if new.news_image %}  
+          <p><img src="{{ new.news_image.url }}" class="img-responsive center-block" alt="Responsive image" /></p>
+          <img src="{% static "kompendium/lactic_acidosis.jpg" %}" class="img-responsive" alt="Picture of Rango" />
+        {% endif %}
         <h4>{{ new.news_title }}</h4>
         <p id="date_style">{{ new.news_date_added|date:"d.m.Y H:i\h" }}</p>
         <p>{{ new.news_text }}</p>
-        {% if new.news_image %}  
-          <p><img src="{{ new.news_image.url }}" class="img-responsive center-block" alt="Responsive image" /></p>
-        {% endif %}
       </div>
     {% endfor %}
 
