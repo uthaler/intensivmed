@@ -187,8 +187,11 @@ def bga(request):
             # osmolal gap
             osmo_result = x.calculatedOsmolality(sodium, potassium, blutzucker, bun)
             osmo_gap = x.osmolalGap(serumOsmo, osmo_result, sodium, potassium, blutzucker, bun)
-
             osmolar_gap = int(serumOsmo) - int(osmo_result)
+
+            # check urinary anion gap
+            hyperchlor_acidosis = x.hyperchlor_acidosis(sodium_urine, potassium_urine, chloride_urine)
+            hyperchlor_acidosis_uag = x.hyperchlor_acidosis_uag(sodium_urine, potassium_urine, chloride_urine)
             
 
 
@@ -214,8 +217,7 @@ def bga(request):
 
             ### hyperchloremic acidosis ####
             hyperchlor_acidosis_patho = x.hyperchlor_acidosis_patho()
-            hyperchlor_acidosis = x.hyperchlor_acidosis(sodium_urine, potassium_urine, chloride_urine)
-            hyperchlor_acidosis_uag = x.hyperchlor_acidosis_uag(sodium_urine, potassium_urine, chloride_urine)
+            
             rta = x.hyperchlor_acidosis_rta(sodium_urine, potassium_urine, chloride_urine, potassium, urine_ph)
             
             ### hypochloraemische azidose ###
@@ -239,7 +241,11 @@ def bga(request):
             #    albumin_adjust = 0
 
             #context = {'names' : names, 'check_ph' : check_ph, 'expected_results' : expected_results, 'anion_gap' : anion_gap, 'albumin_adjust' : albumin_adjust}
-            context = {'osmolar_gap' : osmolar_gap, 'osmo_result' : osmo_result, 'osmo_gap' : osmo_gap, 'lactic_acidosis' : lactic_acidosis, 'secondary_abd' : secondary_abd, 'ph_text' : ph_text, 'list_names' : list_names, 'pco_two_result' : pco_two_result, 'be_result' : be_result, 'ph_result' : ph_result, 'be_na' : be_na, 'be_cl' : be_cl, 'be_lact' : be_lact, 'be_alb' : be_alb, 'be_uma' : be_uma, 'anion_gap' : anion_gap, 'albumin_adjust' : albumin_adjust, 'be_na_diagnosis' : be_na_diagnosis, 'be_cl_diagnosis' : be_cl_diagnosis, 'be_alb_diagnosis' : be_alb_diagnosis, 'be_lact_diagnosis' : be_lact_diagnosis, 'be_uma_diagnosis' : be_uma_diagnosis, 'hyperchlor_acidosis' : hyperchlor_acidosis, 'hyperchlor_acidosis_uag' : hyperchlor_acidosis_uag, 'hypochlor_alkalosis_cl' : hypochlor_alkalosis_cl, 'rta' : rta, 'hypochlor_alkalosis_patho' : hypochlor_alkalosis_patho, 'hyperchlor_acidosis_patho' : hyperchlor_acidosis_patho, 'expected_results' : expected_results, 'anion_gap_check' : anion_gap_check, "compare_be_ag" : compare_be_ag, "lactate_ag_effect" : lactate_ag_effect}
+            #if lactate <=2:
+            #    context = { 'hyperchlor_acidosis_uag' : hyperchlor_acidosis_uag, 'hyperchlor_acidosis' : hyperchlor_acidosis,  'osmolar_gap' : osmolar_gap, 'osmo_result' : osmo_result, 'osmo_gap' : osmo_gap, 'secondary_abd' : secondary_abd, 'ph_text' : ph_text, 'list_names' : list_names, 'pco_two_result' : pco_two_result, 'be_result' : be_result, 'ph_result' : ph_result, 'be_na' : be_na, 'be_cl' : be_cl, 'be_lact' : be_lact, 'be_alb' : be_alb, 'be_uma' : be_uma, 'anion_gap' : anion_gap, 'albumin_adjust' : albumin_adjust, 'be_na_diagnosis' : be_na_diagnosis, 'be_cl_diagnosis' : be_cl_diagnosis, 'be_alb_diagnosis' : be_alb_diagnosis, 'be_lact_diagnosis' : be_lact_diagnosis, 'be_uma_diagnosis' : be_uma_diagnosis, 'hyperchlor_acidosis' : hyperchlor_acidosis, 'hyperchlor_acidosis_uag' : hyperchlor_acidosis_uag, 'hypochlor_alkalosis_cl' : hypochlor_alkalosis_cl, 'rta' : rta, 'hypochlor_alkalosis_patho' : hypochlor_alkalosis_patho, 'hyperchlor_acidosis_patho' : hyperchlor_acidosis_patho, 'expected_results' : expected_results, 'anion_gap_check' : anion_gap_check, "compare_be_ag" : compare_be_ag,}
+            #else:
+            context = { 'hyperchlor_acidosis_uag' : hyperchlor_acidosis_uag, 'hyperchlor_acidosis' : hyperchlor_acidosis,  'osmolar_gap' : osmolar_gap, 'osmo_result' : osmo_result, 'osmo_gap' : osmo_gap, 'lactic_acidosis' : lactic_acidosis, 'secondary_abd' : secondary_abd, 'ph_text' : ph_text, 'list_names' : list_names, 'pco_two_result' : pco_two_result, 'be_result' : be_result, 'ph_result' : ph_result, 'be_na' : be_na, 'be_cl' : be_cl, 'be_lact' : be_lact, 'be_alb' : be_alb, 'be_uma' : be_uma, 'anion_gap' : anion_gap, 'albumin_adjust' : albumin_adjust, 'be_na_diagnosis' : be_na_diagnosis, 'be_cl_diagnosis' : be_cl_diagnosis, 'be_alb_diagnosis' : be_alb_diagnosis, 'be_lact_diagnosis' : be_lact_diagnosis, 'be_uma_diagnosis' : be_uma_diagnosis, 'hyperchlor_acidosis' : hyperchlor_acidosis, 'hyperchlor_acidosis_uag' : hyperchlor_acidosis_uag, 'hypochlor_alkalosis_cl' : hypochlor_alkalosis_cl, 'rta' : rta, 'hypochlor_alkalosis_patho' : hypochlor_alkalosis_patho, 'hyperchlor_acidosis_patho' : hyperchlor_acidosis_patho, 'expected_results' : expected_results, 'anion_gap_check' : anion_gap_check, "compare_be_ag" : compare_be_ag,}
+            
             if ph_text == "Metabolic acidosis":
                 return render(request, 'kompendium/bga_result.html', context)
             elif ph_text == "Acute respiratory acidosis":

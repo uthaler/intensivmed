@@ -382,9 +382,7 @@ class BGA(models.Model):
         pu = float(potassium_urine)
         cu = float(chloride_urine)
         uag = (su + pu) - cu
-        uag = str(uag)
-        urinary_ag = "Urinary anion gap: " + uag + " (U-Na + U-K - U-Cl)"
-        return urinary_ag
+        return uag
 
     def hyperchlor_acidosis_uag(self, sodium_urine, potassium_urine, chloride_urine):
         if not sodium_urine:
@@ -398,9 +396,9 @@ class BGA(models.Model):
         cu = float(chloride_urine)
         urinary_ag = (su + pu) - cu
         if urinary_ag < 0:
-            hyperchlor_acidosis_result = "Urinary AG negative: Extrarenal HCO3 loss, Acid gain."
+            hyperchlor_acidosis_result = "<b>Urinary AG negative</b><br><span id=\"bga_comment_style\">Extrarenal HCO3 loss, Acid gain.</span>"
         else:
-            hyperchlor_acidosis_result = "Urinary AG positive: RTA, renal failure GFR < 60."
+            hyperchlor_acidosis_result = "<b>Urinary AG positive</b><br><span id=\"bga_comment_style\"> RTA, renal failure GFR < 60.</span>"
         return hyperchlor_acidosis_result
 
     def hyperchlor_acidosis_rta(self, sodium_urine, potassium_urine, chloride_urine, potassium, urine_ph):
@@ -545,8 +543,10 @@ class BGA(models.Model):
         anion_gap = sodium - (bicarbonate + chloride)
         if (anion_gap>12) and lactate > 2:
             ergebnis = "<b>Lactic acidosis</b></br><span id=\"bga_comment_style\">lactate > 2 mmol/l</span>"
+        elif (anion_gap < 12) and lactate > 2:
+            ergebnis = "<b>Lactic acidosis</b></br><span id=\"bga_comment_style\">lactate > 2 mmol/l, normal or negative anion gap (hyperchloraemia? hyponatraemia?).</span>"
         else:
-            ergebnis = "High anion gap acidosis, lactate not increased.</br><span id=\"bga_comment_style\">lactate < 2 mmol/l</span>"
+            ergebnis = ""
         return ergebnis
 
     def lactate_ag_effect(self, lactate, sodium, bicarbonate, chloride):
@@ -561,8 +561,10 @@ class BGA(models.Model):
         anion_gap = sodium - (bicarbonate + chloride)
         if (anion_gap-12) - lactate > 0:
             ergebnis = "Increase in AG larger than increase in lactate: other acid must be present. </br><span id=\"bga_comment_style\">considering lactate produces a 1:1 decrement in AG (controversial)</span>"
-        else:
+        elif (anion_gap-12) - lactate == 0:
             ergebnis = "Increase in AG equals increase in lactate: pure lactic acidosis? </br><span id=\"bga_comment_style\">considering lactate produces a 1:1 decrement in AG (controversial)</span>"
+        else:
+            ergebnis = ""
         return ergebnis
 
 

@@ -77,8 +77,8 @@
 			{% if be_cl < -2 %}
 				<h6>Hyperchloremic acidosis</h6>
 				{{ hyperchlor_acidosis_patho | safe }}</br>
-				{{ hyperchlor_acidosis }}</br>
-				{{ hyperchlor_acidosis_uag }}</br>
+				Urinary anion gap: {{ hyperchlor_acidosis | safe | floatformat:"0" }}</br>
+				{{ hyperchlor_acidosis_uag | safe }}</br>
 				{{ rta }}<br>
 			{% endif %}
 			{% if be_cl > 2%}
@@ -106,27 +106,36 @@
 				<p class="well well-sm">
 					{{ compare_be_ag | safe}}
 				</p>
-				<p class="well well-sm">
-					{{ lactic_acidosis | safe}}
-				</p>
-				<p class="well well-sm">
+
+			{% if lactic_acidosis %}
+					<p class="well well-sm">
+						{{ lactic_acidosis | safe}}
+					</p>
+			{% endif %}	
+				
+				<!-- <p class="well well-sm">
 					{{ lactate_ag_effect | safe}}
-				</p>
-				<p>High anion gap acidosis: check osmolar gap</p>
-				<p>expected result {{ expected_results | stringformat:"s" }}</p>
+				</p> -->
 			<h5 class="well well-sm" style="background-color: orangered;">Osmolar Gap</h5>
 				<p>
 					calculated Osmolarity: {{ osmo_result | floatformat:"0" | safe }}</br>
 					<span id="bga_comment_style">mOsmol/l</p></span>
-					Osmolar Gap: {{ osmolar_gap | floatformat:"0" }}
+					Osmolar Gap: {{ osmolar_gap | floatformat:"0" }}</br>
+					<span id="bga_comment_style">measured osmolality - calculated osmolality</span>
 				</p>
 				<p class="well well-sm">
-					{{ osmo_gap | safe}} 
+					{{ osmo_gap | safe}}
 				</p>
+			
+			{% if anion_gap < 12 %}
 			<h5 class="well well-sm" style="background-color: orangered;">Urinary Anion gap</h5>
 				<p>
-					Urinary anion gap: {{ hyperchlor_acidosis | floatformat:"0" }}
+					Urinary anion gap: {{ hyperchlor_acidosis | safe | floatformat:"0" }}<br>
+					<p class="well well-sm">
+						{{ hyperchlor_acidosis_uag | safe }}		
+					</p>
 				</p>
+			{% endif %}
 	</div>
 </div>
 
