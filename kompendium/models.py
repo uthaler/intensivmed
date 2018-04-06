@@ -628,18 +628,24 @@ class BGA(models.Model):
                 result = "Respiratory acidosis"
             elif pco_two < (expected_pco_two - 2):
                 result = "Respiratory alkalosis"
+            else:
+                result = "No secondary acid base disorder"
         elif ph < 7.35 and pco_two > 45 and base_excess >= -2 and base_excess <= 2: # acute respiratory acidosis
             expected_bicarbonate = ((pco_two - 40) / 10) + 24
             if bicarbonate > expected_bicarbonate:
                 result = "Metabolic alkalosis"
             elif bicarbonate < expected_bicarbonate:
                 result = "Metabolic acidosis"
+            else:
+                result = "No secondary acid base disorder"
         elif ph < 7.35 and pco_two > 45 and base_excess > 2: # chronic respiratory acidosis
             expected_bicarbonate = int(((pco_two - 40) / 3) + 24)
             if bicarbonate > expected_bicarbonate:
                 result = "Metabolic alkalosis"
             elif bicarbonate < expected_bicarbonate:
                 result = "Metabolic acidosis"
+            else:
+                result = "No secondary acid base disorder"
         elif ph > 7.45 and base_excess > 2: # metabolic alkalosis
             expected_pco_two = 40 + (0.6 * base_excess)
             expected_pco_two = int(expected_pco_two)
@@ -647,18 +653,24 @@ class BGA(models.Model):
                 result = "Respiratory acidosis"
             elif pco_two < expected_pco_two:
                 result = "Respiratory alkalosis"
+            else:
+                result = "No secondary acid base disorder"
         elif ph > 7.45 and pco_two < 35 and base_excess >= -2 and base_excess <= 2: # acute respiratory alkalosis
             expected_bicarbonate = int(((40 - pco_two) / 5) + 24)
             if bicarbonate > expected_bicarbonate:
                 result = "Metabolic alkalosis"
             elif bicarbonate < expected_bicarbonate:
                 result = "Metabolic acidosis"
+            else:
+                result = "No secondary acid base disorder"
         elif ph > 7.45 and pco_two < 35 and base_excess < -2: # chronic respiratory alkalosis
             expected_bicarbonate = int(((40 - pco_two) / 2) + 24)
             if bicarbonate > expected_bicarbonate:
                 result = "Metabolic alkalosis"
             elif bicarbonate < expected_bicarbonate:
                 result = "Metabolic acidosis"
+            else:
+                result = "No secondary acid base disorder"
         else:
             result = "???"
         return result
