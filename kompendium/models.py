@@ -445,9 +445,9 @@ class BGA(models.Model):
             return ""
         chloride = float(chloride_urine)
         if chloride < 20:
-            chloride = "<table><tr>chloride responsive (U-Cl < 20 mmol/l)</tr><tr></tr><tr><td>eins</td><td>zwei</td></tr></table>"
+            chloride = "chloride responsive"
         else:
-            chloride = "chloride unresponsive (U-Cl > 20 mmol/l)"
+            chloride = "chloride unresponsive"
         return chloride
 
     
@@ -688,12 +688,12 @@ class BGA(models.Model):
             return "Calculated Osmo cannot be calculated: missing value"
         if not bun:
             return "Calculated Osmo cannot be calculated: missing value"
-        serumOsmo = int(serumOsmo)
-        osmo_result = int(osmo_result)
-        natrium = int(natrium)
-        kalium = int(kalium)
-        blutzucker = int(blutzucker)
-        bun = int(bun)
+        serumOsmo = float(serumOsmo)
+        osmo_result = float(osmo_result)
+        natrium = float(natrium)
+        kalium = float(kalium)
+        blutzucker = float(blutzucker)
+        bun = float(bun)
         osmo_result = (2 * (natrium + kalium) + blutzucker /18 + bun / 2.8)
         osmo_gap = serumOsmo - osmo_result
         if osmo_gap > 10:
@@ -701,6 +701,28 @@ class BGA(models.Model):
         else:
             result = "Osmolar gap not increased."
         return result
+
+    def ogap(self, serumOsmo, osmo_result, natrium, kalium, blutzucker, bun):
+        if not serumOsmo:
+            return "Osmolal gap cannot be calculated: missing value"
+        if not osmo_result:
+            return "Osmolal gap cannot be calculated: missing value"
+        if not natrium:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not kalium:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not blutzucker:
+            return "Calculated Osmo cannot be calculated: missing value"
+        if not bun:
+            return "Calculated Osmo cannot be calculated: missing value"
+        serumOsmo = float(serumOsmo)
+        osmo_result = float(osmo_result)
+        natrium = float(natrium)
+        kalium = float(kalium)
+        blutzucker = float(blutzucker)
+        bun = float(bun)
+        ogap = serumOsmo - osmo_result
+        return ogap
 
     def calculatedOsmolality(self, natrium, kalium, blutzucker, bun):
         if not natrium:
@@ -711,10 +733,10 @@ class BGA(models.Model):
             return "Calculated Osmo cannot be calculated: missing value"
         if not bun:
             return "Calculated Osmo cannot be calculated: missing value"
-        natrium = int(natrium)
-        kalium = int(kalium)
-        blutzucker = int(blutzucker)
-        bun = int(bun)
+        natrium = float(natrium)
+        kalium = float(kalium)
+        blutzucker = float(blutzucker)
+        bun = float(bun)
         osmo_result = (2 * (natrium + kalium) + blutzucker /18 + bun / 2.8)
         return osmo_result
              

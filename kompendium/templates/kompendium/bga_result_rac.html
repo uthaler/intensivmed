@@ -113,6 +113,7 @@
 		</p>
 	</div>
 
+{% if secondary_abd == "Metabolic acidosis" %}
 	<div class="well col-sm-3 col-sm-offset-1">
 		<h4>Traditional approach</h4></br>
 			<h5 class="well well-sm" style="background-color: orangered;">Anion Gap</h5>
@@ -141,15 +142,19 @@
 					{{ lactate_ag_effect | safe}}
 				</p> -->
 			<h5 class="well well-sm" style="background-color: orangered;">Osmolar Gap</h5>
+			{% if osmo_result %}
 				<p>
 					calculated Osmolarity: {{ osmo_result | floatformat:"0" | safe }}</br>
 					<span id="bga_comment_style">mOsmol/l</p></span>
-					Osmolar Gap: {{ osmolar_gap | floatformat:"0" }}</br>
+					Osmolar Gap: {{ ogap | floatformat:"0" }}</br>
 					<span id="bga_comment_style">measured osmolality - calculated osmolality</span>
 				</p>
+			{% endif %}
+			{% if osmo_gap %}
 				<p class="well well-sm">
 					{{ osmo_gap | safe}}
 				</p>
+			{% endif %}
 			
 			{% if anion_gap < 12 %}
 			<h5 class="well well-sm" style="background-color: orangered;">Urinary Anion gap</h5>
@@ -160,6 +165,33 @@
 					</p>
 				</p>
 			{% endif %}
+	</div>
+{% endif %}
+	<div class="well col-sm-3 col-sm-offset-1">
+		<h4>Respiratory acidosis</h4>
+		<p>Pure respiratory acidosis: the pCO2 will be elevated, the arterial pH decreased.</p>
+		<p>
+			In metabolic acidosis the expected pCO2 can be calculated:</br>
+			pCO2 = 1.5 x HCO3 + 8</br>
+			pCO2 = 40 + SBE
+		</p>
+		<p>
+			Respiratory compensation takes up to 5 days.</br>
+			In acute respiratory acidosis, SBE will be within the normal range and bicarbonate can be calculated:</br>
+			HCO3 = [(pCO2 -40) / 10] + 24
+		</p>
+		<p>
+			With chronic respiratory acidosis the expected SBE and bicarbonate can be estimated with:</br>
+			SBE = 0.4 x (pCO2 - 40)</br>
+			HCO3 = [(pCO2 - 40) / 3] +24</br>
+		</p>
+		<p>
+			<div class="alert alert-danger">
+				You always need to know the history of the patient ! </br>
+				e.g. pCO2 60 and SBE +5 could also mean acute respiratory acidosis with superimposed metabolic alkalosis.
+			</div>
+		</p>
+
 	</div>
 </div>
 
